@@ -5,38 +5,43 @@ import Stats from "./components/Stats";
 const App = () => {
 	const [counters, setCounters] = useState([
 		{
-			Id: 1,
+			id: 1,
 			value: 0,
 		},
 		{
-			Id: 2,
+			id: 2,
 			value: 0,
 		},
-	]); // {} object
+	]);
 
-	function handleIncrement(counterID) {
-		console.log(`id = ${counterID}`);
-		const newCounters = counters.map((counter) =>
-			counter.Id === counterID
-				? { ...counter, value: counter.value + 1 }
-				: counter
-		);
-		console.log(newCounters);
+	const handleIncrement = (counterId) => {
+		// increment the counter
+		// const findCounter = counters.map((counter) =>
+		// 	counter.id === counterId
+		// 		? { ...counter, value: counter.value + 1 }
+		// 		: counter
+		// );
+		// setCounters(findCounter);
+
+		const newCounters = [...counters];
+		const findIndex = newCounters.findIndex(
+			(counter) => counter.id === counterId
+		); // 0
+		newCounters[findIndex].value++;
 
 		setCounters(newCounters);
-	}
-
-	function handleDecrement(counterID) {
-		const newCounters = counters.map((counter) =>
-			counter.Id === counterID
+	};
+	const handleDecrement = (counterId) => {
+		// decrement the counter
+		const findCounter = counters.map((counter) =>
+			counter.id === counterId
 				? { ...counter, value: counter.value - 1 }
-				: counter
+				: { ...counter }
 		);
-		console.log(newCounters);
-		setCounters(newCounters);
-	}
+		setCounters(findCounter);
+	};
 
-	const totoalCount = counters.reduce(
+	const totalCount = counters.reduce(
 		(result, currentValue) => result + currentValue.value,
 		0
 	);
@@ -44,18 +49,18 @@ const App = () => {
 	return (
 		<div>
 			<Counter
-				Id={1}
-				count={counters[0]?.value}
-				onIncrement={handleIncrement}
-				onDecrement={handleDecrement}
+				id={1}
+				count={counters[0].value}
+				handleIncrement={handleIncrement}
+				handleDecrement={handleDecrement}
 			/>
 			<Counter
-				Id={2}
-				count={counters[1]?.value}
-				onIncrement={handleIncrement}
-				onDecrement={handleDecrement}
+				id={2}
+				count={counters[1].value}
+				handleIncrement={handleIncrement}
+				handleDecrement={handleDecrement}
 			/>
-			<Stats totoalCount={totoalCount} />
+			<Stats totalCount={totalCount} />
 		</div>
 	);
 };
