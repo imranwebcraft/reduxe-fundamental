@@ -4,49 +4,63 @@ const incrementEl = document.getElementById("increment");
 const decrementEl = document.getElementById("decrement");
 
 // initial state
-const initialState = {
-    value: 0,
-};
+const initialState = {count : 0};
 
-// create reducer function
-function counterReducer(state = initialState, action) {
-    if (action.type === "increment") {
-        return {
-            ...state,
-            value: state.value + 1,
-        };
-    } else if (action.type === "decrement") {
-        return {
-            ...state,
-            value: state.value - 1,
-        };
-    } else {
-        return state;
+//action identifiers
+const INCREMENT = 'increment';
+const DECREMENT = 'decrement';
+
+// action creators
+const increment = (value) => {
+    return {
+        type: INCREMENT,
+        payload: value
     }
 }
 
-// create store
+const decrement = (value) => {
+    return {
+        type: DECREMENT,
+        payload: value
+    }
+}
+
+
+//  Reducer function
+const counterReducer = (state = initialState, action) => {
+    if(action.type === INCREMENT){
+        return {...state, count: state.count + 1}
+    }else if (action.type === DECREMENT){
+        return {...state, count: state.count - 1}
+    }else {
+        return state;
+    }
+    
+}
+
+
+// Create Store
 const store = Redux.createStore(counterReducer);
 
-const render = () => {
+
+// Subscribe store
+store.subscribe(showUI)
+
+const showUI = () => {
     const state = store.getState();
-    counterEl.innerText = state.value.toString();
-};
+    counterEl.onpointercancel = state;
+}
 
 // update UI initially
-render();
+showUI();
 
-store.subscribe(render);
 
 // button click listeners
-incrementEl.addEventListener("click", () => {
-    store.dispatch({
-        type: "increment",
-    });
-});
+incrementEl.addEventListener('click', () => {
+    store.dispatch(increment(2))
+})
 
-decrementEl.addEventListener("click", () => {
-    store.dispatch({
-        type: "decrement",
-    });
-});
+decrementEl.addEventListener('click', () => {
+    store.dispatch(decrement(2))
+
+})
